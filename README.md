@@ -10,7 +10,7 @@ Named after **Alt+Shift**, the shortcut you forgot to press when `akuo` came out
 
 **Works in the Claude desktop app** (the Code tab) **and in the Claude Code terminal.** In the desktop app the band has native buttons and an icon; in the terminal it uses text buttons.
 
-![altshift in the Claude desktop app: the band above the prompt, a prompt typed on the wrong layout, the same prompt after Fix, and a mixed prompt where only the wrong words change](docs/preview-1.0.0.svg)
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/preview-1.0.0.svg" /><img src="docs/preview-1.0.0-light.svg" alt="altshift in the Claude desktop app: the band above the prompt, a prompt typed on the wrong layout, the same prompt after Fix, and a mixed prompt where only the wrong words change" /></picture>
 
 ## Features
 
@@ -35,7 +35,7 @@ Converts the whole prompt to the other layout: mostly Hebrew letters become Engl
 
 The chat lays out each line by its first letter, so a Hebrew line with English inside it often comes out scrambled: `smartFix()` shows as `()smartFix`, and the period of an English sentence jumps to its start. With **RTL** on, the plugin marks each Hebrew line right-to-left and keeps inline code, code-like terms (`this()`, `file.ts`) and English sentences in their own left-to-right order.
 
-![The same Hebrew reply with RTL off and on: with it off, smartFix() shows as ()smartFix and an English sentence's period jumps; with it on, both read correctly](docs/rtl-1.0.0.svg)
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/rtl-1.0.0.svg" /><img src="docs/rtl-1.0.0-light.svg" alt="The same Hebrew reply with RTL off and on: with it off, smartFix() shows as ()smartFix and an English sentence's period jumps; with it on, both read correctly" /></picture>
 
 RTL applies to Claude's replies and to your own messages. Code blocks, tables and English lines are never touched. It only changes how the chat is drawn: the conversation itself, and what Claude reads, stay exactly as written. The choice is remembered across sessions.
 
