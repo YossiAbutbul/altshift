@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="520" viewBox="0 0 820 520" font-family="-apple-system, 'Segoe UI', system-ui, sans-serif" font-size="14">
+  <!-- Preview of altshift in the Claude desktop app (dark theme): the band above the prompt, and Fix before and after. Same buttons and swap icon as hooks/register.tsx. -->
+  <defs>
+    <!-- The band: keyboard glyph, Fix, the swap icon, and RTL (on) at the right end -->
+    <g id="band">
+      <rect x="16" y="0" width="788" height="56" rx="12" fill="#2a2927"/>
+      <g transform="translate(34,21)" fill="none" stroke="#8e8d89" stroke-width="1.2">
+        <rect x="0.5" y="0.5" width="15" height="11" rx="2"/>
+        <path d="M3 4h1M6 4h1M9 4h1M12 4h1M3 7h1M6 7h1M9 7h1M12 7h1M5 9.5h6" stroke-linecap="round"/>
+      </g>
+      <rect x="62" y="14" width="42" height="28" rx="7" fill="#ffffff"/>
+      <text x="83" y="33" text-anchor="middle" font-weight="600" fill="#1a1a1a">Fix</text>
+      <g transform="translate(122,20)" fill="none" stroke="#8e8d89" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2.5 5.5h10M10 3l2.5 2.5L10 8"/>
+        <path d="M13.5 10.5h-10M6 8l-2.5 2.5L6 13"/>
+      </g>
+      <rect x="742" y="14" width="46" height="28" rx="7" fill="#ffffff"/>
+      <text x="765" y="33" text-anchor="middle" font-weight="600" fill="#1a1a1a">RTL</text>
+    </g>
+    <g id="prompt">
+      <rect x="16" y="0" width="788" height="52" rx="12" fill="#232220" stroke="#3d3c39"/>
+      <path d="M779 22v6h-9M773 25l-3 3 3 3" fill="none" stroke="#8e8d89" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </defs>
+
+  <rect width="820" height="520" rx="12" fill="#1f1e1c"/>
+
+  <!-- Typed on the wrong layout -->
+  <text x="24" y="30" font-size="11" fill="#7a7975">Typed with the keyboard on English, meaning Hebrew</text>
+  <use href="#band" y="40"/>
+  <use href="#prompt" y="104"/>
+  <text x="36" y="135" fill="#ecebe8">akuo nv nmc</text>
+
+  <!-- After Fix -->
+  <text x="24" y="196" font-size="11" fill="#7a7975">After pressing Fix</text>
+  <use href="#band" y="206"/>
+  <use href="#prompt" y="270"/>
+  <text x="750" y="301" direction="rtl" fill="#ecebe8">שלום מה מצב</text>
+
+  <!-- Mixed: only the wrong words change -->
+  <text x="24" y="362" font-size="11" fill="#7a7975">Fix changes only the words on the wrong layout, real words and code stay</text>
+  <use href="#prompt" y="372"/>
+  <text x="36" y="403" fill="#ecebe8">fix the bug in src/app.ts nv nmc</text>
+  <text x="410" y="432" text-anchor="middle" font-size="18" fill="#8e8d89">↓</text>
+  <use href="#prompt" y="446"/>
+  <text x="36" y="477" fill="#ecebe8">fix the bug in src/app.ts <tspan>&#x2067;מה מצב&#x2069;</tspan></text>
+</svg>
