@@ -1,6 +1,6 @@
 {
   "name": "altshift",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Fix text typed on the wrong keyboard layout (English <-> Hebrew) and show Hebrew chat right-to-left, from a band above the prompt",
   "author": { "name": "Yossi Abutbul" },
   "repository": "https://github.com/YossiAbutbul/altshift",
