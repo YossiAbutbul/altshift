@@ -18,7 +18,8 @@ const icon = (paths: string) =>
   `${paths}</g></svg>`
 // Two opposed arrows.
 // The plugin's own icon (.claude-plugin/icon.png) as a vector, for the about tooltip.
-const VERSION = '1.1.0'
+const VERSION = '1.1.1'
+const REPO = 'https://github.com/YossiAbutbul/altshift'
 const LOGO_SIZE = 20
 const LOGO =
   `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="19" viewBox="0 0 100 95">` +
@@ -67,8 +68,13 @@ export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     const saved = (await $.store.get(RTL_STORE_KEY)) === true
     await update($, isRtl, () => saved)
+    const started = await next(e)
+    // A new chat draws the area above the prompt before the plugin is up, and nothing redraws
+    // it until the first reply: ask for the band now, and once more when the window has settled.
+    $.ui.invalidate('ui.render')
+    void $.clock.sleep(1000).then(() => $.ui.invalidate('ui.render'))
 
-    return next(e)
+    return started
   })
 
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
@@ -80,7 +86,7 @@ export const register: Register = on => {
     if (e.surface !== 'terminal' && e.surface !== 'desktop') {
       return next(e)
     }
-    const { Box, Button, Text } = $.ui.resolve(e)
+    const { Box, Button, Link, Text } = $.ui.resolve(e)
     const Svg = e.surface === 'desktop' ? $.ui.resolve(e).Svg : undefined
 
     // An icon control: the SVG sets its size and a blank Button (braille blanks keep their
@@ -102,14 +108,14 @@ export const register: Register = on => {
       // Layout fixes on the left, the chat's RTL toggle on the right.
       <Box width="100%" justifyContent="space-between" alignItems="center">
         <Box gap={1} alignItems="center">
-          {/* Hovering the keyboard opens a small card with the plugin's icon and version. The desktop
-              opens a hover reveal as a popover from the left edge of its keyed Box, offsets ignored. */}
+          {/* Hovering the keyboard opens a small card with the plugin's icon, a link to its repo and
+              its version, lifted a row and nudged left of the glyph. */}
           <Box key="about-area" alignItems="center">
             <Text dimColor>⌨</Text>
             {Svg && (
-              <Box position="absolute" top={0} left={0} width={20} paddingX={1} gap={1} alignItems="center" display="none" hover={{ display: 'flex' }}>
+              <Box position="absolute" top={-1} left={-2} width={20} paddingX={1} gap={1} alignItems="center" display="none" hover={{ display: 'flex' }}>
                 <Svg source={LOGO} alt="altshift" width={LOGO_SIZE} height={LOGO_SIZE} />
-                <Text bold>altshift</Text>
+                <Link href={REPO}>altshift</Link>
                 <Text dimColor>{`v${VERSION}`}</Text>
               </Box>
             )}
