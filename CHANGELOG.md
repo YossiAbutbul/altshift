@@ -2,6 +2,12 @@
 
 All notable changes to altshift. Versions follow [semantic versioning](https://semver.org): the version in `.claude-plugin/plugin.json` is the one installed. Each version is tagged in git (`v1.0.0` and so on), and pushing a tag publishes its [GitHub Release](https://github.com/YossiAbutbul/altshift/releases) with that version's section below as its notes.
 
+## [1.1.2] - 2026-10-06
+
+### Changed
+
+- The about card shows just the linked name and the version, without the icon.
+
 ## [1.1.1] - 2026-10-06
 
 ### Changed
@@ -29,6 +35,7 @@ First release.
 - **RTL:** shows Hebrew lines in the chat right-to-left, for Claude's replies and your own messages. Inline code, code-like terms (`this()`, `file.ts`) and English sentences keep their left-to-right order. The choice is remembered across sessions.
 - Desktop app: native buttons and an SVG swap icon. Terminal: text buttons.
 
+[1.1.2]: https://github.com/YossiAbutbul/altshift/releases/tag/v1.1.2
 [1.1.1]: https://github.com/YossiAbutbul/altshift/releases/tag/v1.1.1
 [1.1.0]: https://github.com/YossiAbutbul/altshift/releases/tag/v1.1.0
 [1.0.0]: https://github.com/YossiAbutbul/altshift/releases/tag/v1.0.0
