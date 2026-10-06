@@ -17,6 +17,19 @@ const icon = (paths: string) =>
   `<g fill="none" stroke="#8e8d89" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">` +
   `${paths}</g></svg>`
 // Two opposed arrows.
+// The plugin's own icon (.claude-plugin/icon.png) as a vector, for the about tooltip.
+const VERSION = '1.1.0'
+const LOGO_SIZE = 20
+const LOGO =
+  `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="19" viewBox="0 0 100 95">` +
+  `<rect x="0" y="5" width="100" height="90" rx="19" fill="#0d1117"/>` +
+  `<rect x="0" y="0" width="100" height="90" rx="19" fill="#30363D"/>` +
+  `<rect x="5" y="3.5" width="90" height="81.5" rx="15" fill="#242938"/>` +
+  `<text x="27" y="44" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-weight="700" font-size="40" fill="#F0F6FC">A</text>` +
+  `<text x="73" y="44" text-anchor="middle" font-family="Segoe UI, system-ui, sans-serif" font-weight="700" font-size="40" fill="#D97757">א</text>` +
+  `<g stroke="#9198A1" stroke-width="4.5" fill="#9198A1"><path d="M23 61h47"/><path d="M70 54l10 7-10 7z"/>` +
+  `<path d="M77 72H30"/><path d="M30 65l-10 7 10 7z"/></g></svg>`
+
 const SWAP_ICON = icon('<path d="M2.5 5.5h10M10 3l2.5 2.5L10 8"/><path d="M13.5 10.5h-10M6 8l-2.5 2.5L6 13"/>')
 
 const write = async ($: EngineInterface, convert: (text: string) => string) => {
@@ -89,7 +102,18 @@ export const register: Register = on => {
       // Layout fixes on the left, the chat's RTL toggle on the right.
       <Box width="100%" justifyContent="space-between" alignItems="center">
         <Box gap={1} alignItems="center">
-          <Text dimColor>⌨</Text>
+          {/* Hovering the keyboard opens a small card with the plugin's icon and version. The desktop
+              opens a hover reveal as a popover from the left edge of its keyed Box, offsets ignored. */}
+          <Box key="about-area" alignItems="center">
+            <Text dimColor>⌨</Text>
+            {Svg && (
+              <Box position="absolute" top={0} left={0} width={20} paddingX={1} gap={1} alignItems="center" display="none" hover={{ display: 'flex' }}>
+                <Svg source={LOGO} alt="altshift" width={LOGO_SIZE} height={LOGO_SIZE} />
+                <Text bold>altshift</Text>
+                <Text dimColor>{`v${VERSION}`}</Text>
+              </Box>
+            )}
+          </Box>
           <Button key="fix" variant="primary" label="Fix" onPress={() => write($, smartFix)} />
           {iconButton('swap', SWAP_ICON, 'Swap the whole text to the other layout', '⇄', () => write($, swapAll))}
         </Box>

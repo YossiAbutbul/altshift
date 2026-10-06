@@ -108,3 +108,27 @@ describe('swap icon', () => {
     await band.unmount()
   })
 })
+
+describe('about card', () => {
+  test('hovering the keyboard reveals the icon and version, desktop only', async ($, on) => {
+    mock.store(on)
+    const props = {
+      hasSurvey: false,
+      isWorking: false,
+      maxRows: 10,
+      bodyColumns: 80,
+      scroll: { offset: 0, bodyRows: 10 },
+      view: {},
+    }
+    const desktop = await $.ui.mount({ plugin: 'altshift', surface: 'desktop', component: 'AbovePrompt', props })
+    const drawn = JSON.stringify(await desktop.drawn())
+    expect(drawn).toContain('"display":"none"},"hover":{"display":"flex"}')
+    expect(drawn).toContain('v1.1.0')
+    expect(await desktop.find({ type: 'Svg' })).toBeDefined()
+    await desktop.unmount()
+
+    const terminal = await $.ui.mount({ plugin: 'altshift', surface: 'terminal', component: 'AbovePrompt', props })
+    expect(JSON.stringify(await terminal.drawn())).not.toContain('v1.1.0')
+    await terminal.unmount()
+  })
+})
