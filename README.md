@@ -1,4 +1,4 @@
-# altshift
+<h1><img src=".claude-plugin/icon.png" alt="" width="44" align="absmiddle"> altshift</h1>
 
 A Claude Code plugin for working in Hebrew and English. A slim band above the prompt fixes text you typed with the keyboard on the wrong language, and shows Hebrew in the chat right-to-left.
 
