@@ -110,7 +110,7 @@ describe('swap icon', () => {
 })
 
 describe('about card', () => {
-  test('hovering the keyboard reveals the icon and version, desktop only', async ($, on) => {
+  test('hovering the keyboard reveals the repo link and version, desktop only', async ($, on) => {
     mock.store(on)
     const props = {
       hasSurvey: false,
@@ -123,13 +123,12 @@ describe('about card', () => {
     const desktop = await $.ui.mount({ plugin: 'altshift', surface: 'desktop', component: 'AbovePrompt', props })
     const drawn = JSON.stringify(await desktop.drawn())
     expect(drawn).toContain('"display":"none"},"hover":{"display":"flex"}')
-    expect(drawn).toContain('v1.1.1')
+    expect(drawn).toContain('v1.1.2')
     expect(await desktop.find({ type: 'Link' })).toMatchObject({ props: { href: 'https://github.com/YossiAbutbul/altshift' } })
-    expect(await desktop.find({ type: 'Svg' })).toBeDefined()
     await desktop.unmount()
 
     const terminal = await $.ui.mount({ plugin: 'altshift', surface: 'terminal', component: 'AbovePrompt', props })
-    expect(JSON.stringify(await terminal.drawn())).not.toContain('v1.1.1')
+    expect(JSON.stringify(await terminal.drawn())).not.toContain('v1.1.2')
     await terminal.unmount()
   })
 })
