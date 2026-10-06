@@ -17,7 +17,7 @@ const icon = (paths: string) =>
   `<g fill="none" stroke="#8e8d89" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">` +
   `${paths}</g></svg>`
 // Two opposed arrows.
-const VERSION = '1.1.2'
+const VERSION = '1.1.3'
 const REPO = 'https://github.com/YossiAbutbul/altshift'
 
 const SWAP_ICON = icon('<path d="M2.5 5.5h10M10 3l2.5 2.5L10 8"/><path d="M13.5 10.5h-10M6 8l-2.5 2.5L6 13"/>')
@@ -98,11 +98,11 @@ export const register: Register = on => {
       <Box width="100%" justifyContent="space-between" alignItems="center">
         <Box gap={1} alignItems="center">
           {/* Hovering the keyboard opens a small card with a link to the plugin's repo and its
-              version, lifted a row and nudged left of the glyph. */}
+              version, lifted a row and shifted left of the glyph. */}
           <Box key="about-area" alignItems="center">
             <Text dimColor>⌨</Text>
             {Svg && (
-              <Box position="absolute" top={-1} left={-2} width={17} paddingX={1} gap={1} alignItems="center" display="none" hover={{ display: 'flex' }}>
+              <Box position="absolute" top={-1} left={-4} width={17} paddingX={1} gap={1} alignItems="center" display="none" hover={{ display: 'flex' }}>
                 <Link href={REPO}>altshift</Link>
                 <Text dimColor>{`v${VERSION}`}</Text>
               </Box>
