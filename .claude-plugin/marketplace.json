@@ -1,0 +1,12 @@
+{
+  "name": "altshift",
+  "owner": { "name": "Yossi Abutbul" },
+  "description": "A Claude Code plugin for working in Hebrew and English",
+  "plugins": [
+    {
+      "name": "altshift",
+      "source": "./",
+      "description": "Fix text typed on the wrong keyboard layout (English <-> Hebrew) and show Hebrew chat right-to-left, from a band above the prompt"
+    }
+  ]
+}
