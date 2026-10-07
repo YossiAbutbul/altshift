@@ -53,6 +53,11 @@ describe('chat drawing', () => {
   for (const surface of ['terminal', 'desktop'] as const) {
     test(`RTL toggles Hebrew replies on ${surface}`, async ($, on) => {
       mock.store(on)
+      // The app beneath the plugin, drawing nothing of its own in the slot.
+      on('ui.render', { component: 'AbovePrompt' }, ($, e) => {
+        const { Box } = $.ui.resolve(e)
+        return <Box flexDirection="column" />
+      })
       // Stands for the surface's own drawing of a reply: its text as given.
       on('ui.render', { component: 'AssistantMessage' }, ($, e) => {
         const { Text } = $.ui.resolve(e)
@@ -91,6 +96,11 @@ describe('chat drawing', () => {
 describe('swap icon', () => {
   test('the desktop draws the swap control as an SVG icon', async ($, on) => {
     mock.store(on)
+    // The app beneath the plugin, drawing nothing of its own in the slot.
+    on('ui.render', { component: 'AbovePrompt' }, ($, e) => {
+        const { Box } = $.ui.resolve(e)
+        return <Box flexDirection="column" />
+      })
     const band = await $.ui.mount({
       plugin: 'altshift',
       surface: 'desktop',
@@ -112,6 +122,11 @@ describe('swap icon', () => {
 describe('about card', () => {
   test('hovering the keyboard reveals the repo link and version, desktop only', async ($, on) => {
     mock.store(on)
+    // The app beneath the plugin, drawing nothing of its own in the slot.
+    on('ui.render', { component: 'AbovePrompt' }, ($, e) => {
+        const { Box } = $.ui.resolve(e)
+        return <Box flexDirection="column" />
+      })
     const props = {
       hasSurvey: false,
       isWorking: false,
@@ -123,12 +138,34 @@ describe('about card', () => {
     const desktop = await $.ui.mount({ plugin: 'altshift', surface: 'desktop', component: 'AbovePrompt', props })
     const drawn = JSON.stringify(await desktop.drawn())
     expect(drawn).toContain('"display":"none"},"hover":{"display":"flex"}')
-    expect(drawn).toContain('v1.1.3')
+    expect(drawn).toContain('v1.1.4')
     expect(await desktop.find({ type: 'Link' })).toMatchObject({ props: { href: 'https://github.com/YossiAbutbul/altshift' } })
     await desktop.unmount()
 
     const terminal = await $.ui.mount({ plugin: 'altshift', surface: 'terminal', component: 'AbovePrompt', props })
-    expect(JSON.stringify(await terminal.drawn())).not.toContain('v1.1.3')
+    expect(JSON.stringify(await terminal.drawn())).not.toContain('v1.1.4')
     await terminal.unmount()
   })
+})
+
+describe('shared slot', () => {
+  for (const surface of ['terminal', 'desktop'] as const) {
+    test(`what the rest of the chain draws stays, under the band, on ${surface}`, async ($, on) => {
+      mock.store(on)
+      // Stands for the app's own drawing in the slot, or another plugin's band.
+      on('ui.render', { component: 'AbovePrompt' }, ($, e) => {
+        const { Text } = $.ui.resolve(e)
+        return <Text>below the band</Text>
+      })
+      const band = await $.ui.mount({
+        plugin: 'altshift',
+        surface,
+        component: 'AbovePrompt',
+        props: { hasSurvey: false, isWorking: false, maxRows: 10, bodyColumns: 80, scroll: { offset: 0, bodyRows: 10 }, view: {} },
+      })
+      expect(await band.find({ key: 'fix' })).toBeDefined()
+      expect(await band.find({ type: 'Text', text: 'below the band' })).toBeDefined()
+      await band.unmount()
+    })
+  }
 })

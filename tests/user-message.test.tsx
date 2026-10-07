@@ -5,6 +5,11 @@ const RLI = '\u2067'
 for (const surface of ['terminal', 'desktop'] as const) {
   test(`RTL reaches the person's own messages on ${surface}`, async ($, on) => {
     mock.store(on)
+    // The app beneath the plugin, drawing nothing of its own in the slot.
+    on('ui.render', { component: 'AbovePrompt' }, ($, e) => {
+        const { Box } = $.ui.resolve(e)
+        return <Box flexDirection="column" />
+      })
     let seen = ''
     // Stands for the surface's own drawing of the row: records the text it is handed.
     on('ui.render', { component: 'UserMessage' }, ($, e) => {

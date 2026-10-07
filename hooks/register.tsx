@@ -17,7 +17,7 @@ const icon = (paths: string) =>
   `<g fill="none" stroke="#8e8d89" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">` +
   `${paths}</g></svg>`
 // Two opposed arrows.
-const VERSION = '1.1.3'
+const VERSION = '1.1.4'
 const REPO = 'https://github.com/YossiAbutbul/altshift'
 
 const SWAP_ICON = icon('<path d="M2.5 5.5h10M10 3l2.5 2.5L10 8"/><path d="M13.5 10.5h-10M6 8l-2.5 2.5L6 13"/>')
@@ -71,10 +71,13 @@ export const register: Register = on => {
       return next(e)
     }
 
-    const rtl = await read($, isRtl)
     if (e.surface !== 'terminal' && e.surface !== 'desktop') {
       return next(e)
     }
+    // The slot is shared: the app's own drawing (the desktop's git changes bar) and other
+    // plugins' bands come from the rest of the chain and are drawn under the band, not replaced.
+    const below = await next(e)
+    const rtl = await read($, isRtl)
     const { Box, Button, Link, Text } = $.ui.resolve(e)
     const Svg = e.surface === 'desktop' ? $.ui.resolve(e).Svg : undefined
 
@@ -93,7 +96,7 @@ export const register: Register = on => {
         <Button key={key} label={glyph} dimColor onPress={onPress} />
       )
 
-    return (
+    const band = (
       // Layout fixes on the left, the chat's RTL toggle on the right.
       <Box width="100%" justifyContent="space-between" alignItems="center">
         <Box gap={1} alignItems="center">
@@ -120,6 +123,18 @@ export const register: Register = on => {
           onPress={() => setRtl($, !rtl)}
         />
       </Box>
+    )
+
+    // The app answers an empty slot with an empty Box: nothing to keep under the band.
+    const isEmpty = !below || (below.type === 'Box' && (below.children ?? []).length === 0)
+
+    return !isEmpty ? (
+      <Box flexDirection="column">
+        {band}
+        {below}
+      </Box>
+    ) : (
+      band
     )
   })
 
