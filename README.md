@@ -137,6 +137,7 @@ claude plugin marketplace remove altshift
 | The band appears twice | The plugin is loaded twice, for example installed **and** also loaded with `--plugin-dir` or listed in `CLAUDE_CODE_PLUGIN_DIRS`. Keep only one. |
 | "Could not write the prompt box" | A dialog was open over the prompt. Close it and press the button again. |
 | A message I already saw didn't change after turning RTL on | RTL applies as messages are drawn. Scroll it out of view and back, or look at the next message. |
+| RTL is on but Claude's replies stay left-to-right | Another plugin may draw replies itself without passing them on, so altshift never sees them (for example one that adds a button to each paragraph). Turn that plugin off and start a new session to check. |
 | Errors | Run `claude --debug`; lines starting with `altshift:` explain what failed. |
 
 ### Try it once without installing
