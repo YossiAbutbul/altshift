@@ -17,7 +17,7 @@ const icon = (paths: string) =>
   `<g fill="none" stroke="#8e8d89" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">` +
   `${paths}</g></svg>`
 // Two opposed arrows.
-const VERSION = '1.1.5'
+const VERSION = '1.1.6'
 const REPO = 'https://github.com/YossiAbutbul/altshift'
 
 const SWAP_ICON = icon('<path d="M2.5 5.5h10M10 3l2.5 2.5L10 8"/><path d="M13.5 10.5h-10M6 8l-2.5 2.5L6 13"/>')
