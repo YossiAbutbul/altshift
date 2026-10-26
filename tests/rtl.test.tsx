@@ -35,6 +35,24 @@ describe('toRtl', () => {
     expect(toRtl(`Setup is done.\n\nThe tools:\n\n${item}`)).toBe(`Setup is done.\n\nThe tools:\n\n${item}`)
   })
 
+  test('in a Hebrew message, English lines sit on the right too, in their own order', async () => {
+    const message = [
+      'השינויים לפי קובץ:',
+      '### Server',
+      '- `server.py`, סעיף 1: השרת מחזיר `Registry()` בלי DB.',
+      '- `server.py`, סעיף 4: השרת יוצא עם `sys.exit(EXIT_ERROR)`.',
+      '- `session.py`, סעיף 2: יש עכשיו שני שמות.',
+      '**Note:**',
+      'The server answers with code 1603.',
+    ].join('\n')
+    const lines = toRtl(message).split('\n')
+    expect(lines[1]).toBe(`### ${RLM}${LRI}Server${PDI}`)
+    expect(lines[5]).toBe(`${RLM}**${LRI}Note:${PDI}**`)
+    expect(lines[6]).toBe(`${RLM}${LRI}The server answers with code 1603.${PDI}`)
+    // In an English message they stay as they are.
+    expect(toRtl('### Server\n\nThe server answers.')).toBe('### Server\n\nThe server answers.')
+  })
+
   test('inline code reads left to right', async () => {
     expect(toRtl('הפונקציה `smartFix()` מתקנת')).toBe(`${RLM}הפונקציה ${LRI}\`smartFix()\`${PDI} מתקנת`)
   })
@@ -152,12 +170,12 @@ describe('about card', () => {
     const desktop = await $.ui.mount({ plugin: 'altshift', surface: 'desktop', component: 'AbovePrompt', props })
     const drawn = JSON.stringify(await desktop.drawn())
     expect(drawn).toContain('"display":"none"},"hover":{"display":"flex"}')
-    expect(drawn).toContain('v1.1.7')
+    expect(drawn).toContain('v1.1.8')
     expect(await desktop.find({ type: 'Link' })).toMatchObject({ props: { href: 'https://github.com/YossiAbutbul/altshift' } })
     await desktop.unmount()
 
     const terminal = await $.ui.mount({ plugin: 'altshift', surface: 'terminal', component: 'AbovePrompt', props })
-    expect(JSON.stringify(await terminal.drawn())).not.toContain('v1.1.7')
+    expect(JSON.stringify(await terminal.drawn())).not.toContain('v1.1.8')
     await terminal.unmount()
   })
 })

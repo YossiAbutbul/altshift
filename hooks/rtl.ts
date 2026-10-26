@@ -91,6 +91,17 @@ const isHebrewMessage = (lines: string[]) => {
   return hebrew > english
 }
 
+// An English line of a Hebrew message (a heading such as "Server") sits on the right like
+// the rest, as a right-to-left document lays it out, and reads in its own order inside:
+// a closing period stays at its end. Emphasis markers at its ends stay outside the
+// isolate, where markdown still reads them (`**Note:**`).
+const englishInHebrew = (line: string) => {
+  if (!/[a-zA-Z]/.test(line)) return line
+  const [, lead = '', body = ''] = LEAD.exec(line) ?? []
+  const [, open = '', inner = '', close = ''] = /^([*_~]*)(.*?)([*_~]*)$/.exec(body) ?? []
+  return `${lead}${RLM}${open}${ltr(inner)}${close}`
+}
+
 export const toRtl = (text: string, mode: RtlMode = 'mark') => {
   let isCode = false
   const lines = text.split('\n')
@@ -102,7 +113,13 @@ export const toRtl = (text: string, mode: RtlMode = 'mark') => {
         isCode = !isCode
         return line
       }
-      if (isCode || /^\s*\|/.test(line) || !hasHebrew(line) || !(isHebrew || isHebrewLine(line)) || line.includes(RLM) || line.includes(RLI)) {
+      if (isCode || /^\s*\|/.test(line) || line.includes(RLM) || line.includes(RLI)) {
+        return line
+      }
+      if (!hasHebrew(line)) {
+        return mode === 'mark' && isHebrew ? englishInHebrew(line) : line
+      }
+      if (!(isHebrew || isHebrewLine(line))) {
         return line
       }
       const [, lead = '', body = ''] = LEAD.exec(line) ?? []
