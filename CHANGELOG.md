@@ -2,6 +2,12 @@
 
 All notable changes to altshift. Versions follow [semantic versioning](https://semver.org): the version in `.claude-plugin/plugin.json` is the one installed. Each version is tagged in git (`v1.0.0` and so on), and pushing a tag publishes its [GitHub Release](https://github.com/YossiAbutbul/altshift/releases) with that version's section below as its notes.
 
+## [1.1.8] - 2026-10-26
+
+### Fixed
+
+- RTL: in a reply written mostly in Hebrew, English-only lines (a heading such as "Server", a sentence in English) sit on the right like the rest of the reply, as in a right-to-left document, and keep their own word order inside: a closing period stays at the end, and bold stays bold. In an English reply nothing changes.
+
 ## [1.1.7] - 2026-10-26
 
 ### Fixed
@@ -65,6 +71,7 @@ First release.
 - **RTL:** shows Hebrew lines in the chat right-to-left, for Claude's replies and your own messages. Inline code, code-like terms (`this()`, `file.ts`) and English sentences keep their left-to-right order. The choice is remembered across sessions.
 - Desktop app: native buttons and an SVG swap icon. Terminal: text buttons.
 
+[1.1.8]: https://github.com/YossiAbutbul/altshift/releases/tag/v1.1.8
 [1.1.7]: https://github.com/YossiAbutbul/altshift/releases/tag/v1.1.7
 [1.1.6]: https://github.com/YossiAbutbul/altshift/releases/tag/v1.1.6
 [1.1.5]: https://github.com/YossiAbutbul/altshift/releases/tag/v1.1.5
