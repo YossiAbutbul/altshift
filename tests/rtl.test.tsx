@@ -21,6 +21,12 @@ describe('toRtl', () => {
     expect(toRtl('| א | ב |')).toBe('| א | ב |')
   })
 
+  test('inline code and link addresses do not make a Hebrew line English', async () => {
+    const line = '- **RSA:** הדוגמה משתמשת ב-`RSAES_OAEP_SHA_Encryptor` וב-`RSAES_OAEP_SHA_Decryptor`, כלומר OAEP עם SHA-1.'
+    expect(toRtl(line).startsWith(`- ${RLM}`)).toBe(true)
+    expect(toRtl('ראה [מסמך](https://example.com/docs/requirements/long-path.md)').startsWith(RLM)).toBe(true)
+  })
+
   test('inline code reads left to right', async () => {
     expect(toRtl('הפונקציה `smartFix()` מתקנת')).toBe(`${RLM}הפונקציה ${LRI}\`smartFix()\`${PDI} מתקנת`)
   })
@@ -138,12 +144,12 @@ describe('about card', () => {
     const desktop = await $.ui.mount({ plugin: 'altshift', surface: 'desktop', component: 'AbovePrompt', props })
     const drawn = JSON.stringify(await desktop.drawn())
     expect(drawn).toContain('"display":"none"},"hover":{"display":"flex"}')
-    expect(drawn).toContain('v1.1.5')
+    expect(drawn).toContain('v1.1.6')
     expect(await desktop.find({ type: 'Link' })).toMatchObject({ props: { href: 'https://github.com/YossiAbutbul/altshift' } })
     await desktop.unmount()
 
     const terminal = await $.ui.mount({ plugin: 'altshift', surface: 'terminal', component: 'AbovePrompt', props })
-    expect(JSON.stringify(await terminal.drawn())).not.toContain('v1.1.5')
+    expect(JSON.stringify(await terminal.drawn())).not.toContain('v1.1.6')
     await terminal.unmount()
   })
 })

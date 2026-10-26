@@ -37,10 +37,15 @@ const isolateRun = (_: string, run: string, closing: string) => {
 
 export const hasHebrew = (text: string) => /[א-ת]/.test(text)
 
-// A Hebrew line: it opens with a Hebrew letter, or most of its letters are Hebrew.
-const isHebrewLine = (text: string) =>
-  /^[^a-zA-Zא-ת]*[א-ת]/.test(text) ||
-  (text.match(HEBREW) ?? []).length >= (text.match(LATIN) ?? []).length
+// A Hebrew line: it opens with a Hebrew letter, or most of the letters of its prose are
+// Hebrew. Inline code and link addresses are not prose: a Hebrew sentence naming a long
+// identifier (`RSAES_OAEP_SHA_Encryptor`) is still a Hebrew sentence.
+const prose = (text: string) => text.replace(INLINE_CODE, ' ').replace(/\]\([^)]*\)/g, ']')
+
+const isHebrewLine = (text: string) => {
+  const words = prose(text)
+  return /^[^a-zA-Zא-ת]*[א-ת]/.test(words) || (words.match(HEBREW) ?? []).length >= (words.match(LATIN) ?? []).length
+}
 
 const ltr = (part: string) => `${LRI}${part}${PDI}`
 
