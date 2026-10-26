@@ -27,6 +27,14 @@ describe('toRtl', () => {
     expect(toRtl('ראה [מסמך](https://example.com/docs/requirements/long-path.md)').startsWith(RLM)).toBe(true)
   })
 
+  test('in a Hebrew message, a line full of English terms is still Hebrew', async () => {
+    const item = '- **Visual Studio Community 2026:** גרסה 18.11 עם C++ desktop workload. הקומפיילר `cl.exe` עובד מתוך ה-Developer prompt (MSVC 14.51).'
+    const message = ['ההתקנה הסתיימה, וה-client נבנה ונרשם לשרת.', '', '**מה מותקן ונבדק**', '', item].join('\n')
+    expect(toRtl(message).split('\n')[4].startsWith(`- ${RLM}`)).toBe(true)
+    // Alone, in an English message, the same line stays as it is.
+    expect(toRtl(`Setup is done.\n\nThe tools:\n\n${item}`)).toBe(`Setup is done.\n\nThe tools:\n\n${item}`)
+  })
+
   test('inline code reads left to right', async () => {
     expect(toRtl('הפונקציה `smartFix()` מתקנת')).toBe(`${RLM}הפונקציה ${LRI}\`smartFix()\`${PDI} מתקנת`)
   })
@@ -144,12 +152,12 @@ describe('about card', () => {
     const desktop = await $.ui.mount({ plugin: 'altshift', surface: 'desktop', component: 'AbovePrompt', props })
     const drawn = JSON.stringify(await desktop.drawn())
     expect(drawn).toContain('"display":"none"},"hover":{"display":"flex"}')
-    expect(drawn).toContain('v1.1.6')
+    expect(drawn).toContain('v1.1.7')
     expect(await desktop.find({ type: 'Link' })).toMatchObject({ props: { href: 'https://github.com/YossiAbutbul/altshift' } })
     await desktop.unmount()
 
     const terminal = await $.ui.mount({ plugin: 'altshift', surface: 'terminal', component: 'AbovePrompt', props })
-    expect(JSON.stringify(await terminal.drawn())).not.toContain('v1.1.6')
+    expect(JSON.stringify(await terminal.drawn())).not.toContain('v1.1.7')
     await terminal.unmount()
   })
 })

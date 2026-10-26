@@ -66,17 +66,43 @@ const isolateLtr = (body: string) => {
 // it holds (the person's own message), so at least its order reads right.
 export type RtlMode = 'mark' | 'isolate'
 
+// The prose lines of a message: neither code fences nor table rows.
+const proseLines = (lines: string[]) => {
+  let isCode = false
+  return lines.filter(line => {
+    if (/^\s*(```|~~~)/.test(line)) {
+      isCode = !isCode
+      return false
+    }
+    return !isCode && !/^\s*\|/.test(line)
+  })
+}
+
+// A Hebrew message: more of its prose lines are Hebrew than English. In one, every line
+// that holds Hebrew is a Hebrew sentence, however many English terms it names
+// ("**Visual Studio Community 2026:** גרסה 18.11 עם C++ desktop workload").
+const isHebrewMessage = (lines: string[]) => {
+  let hebrew = 0
+  let english = 0
+  for (const line of proseLines(lines)) {
+    if (hasHebrew(line) && isHebrewLine(line)) hebrew += 1
+    else if (/[a-zA-Z]/.test(prose(line))) english += 1
+  }
+  return hebrew > english
+}
+
 export const toRtl = (text: string, mode: RtlMode = 'mark') => {
   let isCode = false
+  const lines = text.split('\n')
+  const isHebrew = isHebrewMessage(lines)
 
-  return text
-    .split('\n')
+  return lines
     .map(line => {
       if (/^\s*(```|~~~)/.test(line)) {
         isCode = !isCode
         return line
       }
-      if (isCode || /^\s*\|/.test(line) || !hasHebrew(line) || !isHebrewLine(line) || line.includes(RLM) || line.includes(RLI)) {
+      if (isCode || /^\s*\|/.test(line) || !hasHebrew(line) || !(isHebrew || isHebrewLine(line)) || line.includes(RLM) || line.includes(RLI)) {
         return line
       }
       const [, lead = '', body = ''] = LEAD.exec(line) ?? []
